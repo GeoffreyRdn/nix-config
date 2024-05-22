@@ -139,8 +139,16 @@
 
         ohMyZsh = {
             enable = true;
+            plugins = [
+                "git"
+                "docker"
+                "python"
+                "man"
+                "colored-man-pages"
+                "sudo"
+              ];
+            };
         };
-    };
     };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
