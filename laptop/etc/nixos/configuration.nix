@@ -1,3 +1,4 @@
+
 # Edit this configuration file to define what should be installed on your system
 # Help is available in the configuration.nix(5) man page and in the 
 # NixOS manual (accessible by running `nixos-help`).
@@ -40,7 +41,7 @@
     boot.loader.efi.canTouchEfiVariables = true;
     boot.loader.efi.efiSysMountPoint = "/boot";
 
-    networking.hostName = "geoffrey"; # Define your hostname.
+    networking.hostName = "nixos"; # Define your hostname.
 
     # Pick only one of the below networking options. 
 
@@ -153,7 +154,7 @@
     };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.G = { 
+    users.users.geff = { 
         isNormalUser = true;
         extraGroups = [ "wheel" "networkmanager" "audio" "docker" ];
             packages = with pkgs; [
@@ -218,8 +219,6 @@
 
             actkbd
             brightnessctl
-
-            google-drive-ocamlfuse
 
             polybar
 

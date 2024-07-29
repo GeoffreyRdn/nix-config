@@ -13,5 +13,5 @@ cp -r /home/geoffrey/.vim home/geoffrey/.vim/
 cp -r /home/geoffrey/.wallpapers home/geoffrey/.wallpapers/
 
 git add .
-git commit -m "chore: backup on $(date)"
+git commit -m "chore: desktop backup on $(date)"
 git push

@@ -1,2 +1,0 @@
-#!/bin/sh
-/run/current-system/sw/bin/feh --no-fehbg --bg-scale '/home/G/.wallpapers/skull-gruv.png' 
