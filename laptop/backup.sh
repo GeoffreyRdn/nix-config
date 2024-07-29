@@ -18,6 +18,6 @@ cp -r /home/geff/.config/keepassxc home/geff/.config/keepassxc
 cp -r /home/geff/.vim home/geff/.vim/
 cp -r /home/geff/.wallpapers home/geff/.wallpapers/
 
-#git add .
-#git commit -m "chore: laptop backup on $(date)"
-#git push
+git add .
+git commit -m "chore: laptop backup on $(date)"
+git push
