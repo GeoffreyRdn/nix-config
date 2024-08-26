@@ -69,37 +69,46 @@
 
     # Enable the X11 windowing system.
     services = {
-	xserver = {
+	    xserver = {
             enable = true;
+            videoDrivers = [ "amdgpu" ];
             xkb.layout = "us";
             desktopManager = {
                 xterm.enable = false;
             };
 
-
-	    windowManager.i3 = {
-	        enable = true;
-		extraPackages = with pkgs; [
-		    dmenu
-		    i3status
-		    i3lock
-		    i3blocks
+	        windowManager.i3 = {
+	            enable = true;
+		        extraPackages = with pkgs; [
+                    dmenu
+                    i3status
+                    i3lock
+                    i3blocks
                 ];
             };
+
             displayManager = {
                 sessionCommands = ''
                   feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
-                  xrandr --auto
-                  xrandr --output DP-1 --primary --rate 144 --right-of HDMI-1 --output HDMI-1
+                  xrandr --output DisplayPort-0 --primary --rate 144 --right-of HDMI-A-0 --output HDMI-A-0 --auto
                   polybar &
                   picom &
                 '';
 	        };
         };
 
+        # Handle USB
+        gvfs.enable = true;
+        udisks2.enable = true;
+
         displayManager = {
             defaultSession = "none+i3";
         };
+    };
+
+    services.picom = {
+        enable = true;
+        vSync = true;
     };
 
     systemd.user.services.mpris-proxy = {
