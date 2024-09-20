@@ -302,9 +302,6 @@
     dunst
 
     eww
-
-    # format
-    nixfmt-rfc-style
   ];
 
   # Some programs need SUID wrappers
