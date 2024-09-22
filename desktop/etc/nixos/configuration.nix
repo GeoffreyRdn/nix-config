@@ -4,335 +4,288 @@
 
 { config, pkgs, ... }:
 
-{
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
+{ imports =
+    [ # Include the results of the hardware scan.
+        ./hardware-configuration.nix
+    ];
 
-  # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
+    # Use the systemd-boot EFI boot loader.
+    # boot.loader.systemd-boot.enable = true;
+    # boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-    useOSProber = true;
-    theme = pkgs.stdenv.mkDerivation rec {
-      pname = "catppuccin-grub";
-      version = "1";
-      src = pkgs.fetchFromGitHub {
-        owner = "catppuccin";
-        repo = "grub";
-        rev = "803c5df";
-        hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
-      };
-      installPhase = "
+    boot.loader.grub = {
+        enable = true;
+        device = "nodev";
+        efiSupport = true;
+        useOSProber = true;
+        theme = pkgs.stdenv.mkDerivation rec {
+            pname = "catppuccin-grub";
+            version = "1";
+            src = pkgs.fetchFromGitHub {
+                owner = "catppuccin";
+                repo = "grub";
+                rev = "803c5df";
+                hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
+            };
+            installPhase = "
                 mkdir -p $out
                 cp -r src/catppuccin-mocha-grub-theme/* $out/
             ";
-      meta = {
-        description = "catppuccin-grub";
-      };
-    };
-  };
-
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
-
-  networking.hostName = "nixos"; # Define your hostname.
-
-  # Pick only one of the below networking options.
-
-  # Enables wireless support via wpa_supplicant.
-  # networking.wireless.enable = true;
-
-  # Easiest to use and most distros use this by default.
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    #keyMap = "us";
-    useXkbConfig = true; # use xkbOptions in tty.
-  };
-
-  environment.pathsToLink = [ "/libexec" ];
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    desktopManager = {
-      xterm.enable = false;
+            meta = {
+            description = "catppuccin-grub";
+            };
+        };
     };
 
-    displayManager = {
-      defaultSession = "none+i3";
-      sessionCommands = ''
-        feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
-        polybar &
-        picom &
-      '';
+    boot.loader.efi.canTouchEfiVariables = true;
+    boot.loader.efi.efiSysMountPoint = "/boot";
+
+    networking.hostName = "nixos"; # Define your hostname.
+
+    # Pick only one of the below networking options.
+
+    # Enables wireless support via wpa_supplicant.
+    # networking.wireless.enable = true;
+
+    # Easiest to use and most distros use this by default.
+    networking.networkmanager.enable = true;
+
+    # Set your time zone.
+    time.timeZone = "Europe/Paris";
+
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # Select internationalisation properties.
+    i18n.defaultLocale = "en_US.UTF-8";
+    console = {
+        font = "Lat2-Terminus16";
+        #keyMap = "us";
+        useXkbConfig = true; # use xkbOptions in tty.
     };
 
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu
-        i3status
-        i3lock
-        i3blocks
-      ];
+    environment.pathsToLink = [ "/libexec" ];
+
+    # Enable the X11 windowing system.
+    services = {
+	    xserver = {
+            enable = true;
+            videoDrivers = [ "amdgpu" ];
+            xkb.layout = "us";
+            desktopManager = {
+                xterm.enable = false;
+            };
+
+	        windowManager.i3 = {
+	            enable = true;
+		        extraPackages = with pkgs; [
+                    dmenu
+                    i3status
+                    i3lock
+                    i3blocks
+                ];
+            };
+
+            displayManager = {
+                sessionCommands = ''
+                  feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
+                  xrandr --output DisplayPort-0 --primary --rate 144 --left-of HDMI-A-0 --output HDMI-A-0 --auto
+                  polybar &
+                  picom &
+                '';
+	        };
+        };
+
+        # Handle USB
+        gvfs.enable = true;
+        udisks2.enable = true;
+
+        displayManager = {
+            defaultSession = "none+i3";
+        };
     };
-  };
 
-  systemd.user.services.mpris-proxy = {
-    description = "Mpris proxy";
-    after = [
-      "network.target"
-      "sound.target"
-    ];
-    wantedBy = [ "default.target" ];
-    serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-  };
-
-  # enable flakes
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
-  # services.xserver.xkbOptions = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
-  # enables support for Bluetooth
-  hardware.bluetooth.enable = true;
-  # powers up the default Bluetooth controller on boot
-  hardware.bluetooth.powerOnBoot = true;
-
-  hardware.bluetooth.settings = {
-    General = {
-      Enable = "Source,Sink,Media,Socket";
-    };
-  };
-
-  services.blueman.enable = true; # bluetooth cli
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  users.defaultUserShell = pkgs.zsh;
-  programs = {
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      autosuggestions.enable = true;
-      zsh-autoenv.enable = true;
-      syntaxHighlighting.enable = true;
-
-      ohMyZsh = {
+    services.picom = {
         enable = true;
-        plugins = [
-          "git"
-          "docker"
-          "python"
-          "man"
-          "colored-man-pages"
-          "sudo"
-        ];
+        vSync = true;
+    };
+
+    systemd.user.services.mpris-proxy = {
+        description = "Mpris proxy";
+        after = [ "network.target" "sound.target" ];
+        wantedBy = [ "default.target" ];
+        serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+    };
+
+
+    # enable flakes
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+    # services.xserver.xkbOptions = "eurosign:e,caps:escape";
+
+    # Enable CUPS to print documents.
+    services.printing.enable = true;
+
+    # Enable sound.
+    sound.enable = true;
+    hardware.pulseaudio.enable = true;
+
+    # enables support for Bluetooth
+    hardware.bluetooth.enable = true;
+    # powers up the default Bluetooth controller on boot
+    hardware.bluetooth.powerOnBoot = true;
+
+    hardware.bluetooth.settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
       };
     };
-  };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.geff = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "audio"
-      "docker"
-    ];
-    packages = with pkgs; [
-      firefox
-      tree
-    ];
-    shell = pkgs.zsh;
-  };
+    # Enable touchpad support (enabled default in most desktopManager).
+    # services.xserver.libinput.enable = true;
 
-  virtualisation.docker.enable = true;
+    users.defaultUserShell = pkgs.zsh;
+    programs = {
+    zsh = {
+        enable = true;
+        enableCompletion = true;
+        autosuggestions.enable = true;
+        zsh-autoenv.enable = true;
+        syntaxHighlighting.enable = true;
 
-  documentation.dev.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.pulseaudio = true;
-
-  services.actkbd = {
-    enable = true;
-    bindings = [
-      {
-        keys = [ 60 ];
-        events = [ "key" ];
-        command = "/run/current-system/sw/bin/brightnessctl s 5%-";
-      }
-      {
-        keys = [ 61 ];
-        events = [ "key" ];
-        command = "/run/current-system/sw/bin/brightnessctl s +5%";
-      }
-    ];
-  };
-
-  services.grafana = {
-    enable = true;
-    settings = {
-      server = {
-        http_addr = "127.0.0.1";
-        http_port = 3001;
-        domain = "your.domain";
-        root_url = "https://your.domain/grafana/";
-        serve_from_sub_path = true;
-      };
+        ohMyZsh = {
+            enable = true;
+            plugins = [
+                "git"
+                "docker"
+                "python"
+                "man"
+                "colored-man-pages"
+                "sudo"
+              ];
+            };
+        };
     };
-  };
 
-  fonts.fontconfig.enable = true;
-  fonts.fonts = with pkgs; [
-    (nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-      ];
-    })
-  ];
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.users.geoffrey = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" "networkmanager" "audio" "docker" ];
+            packages = with pkgs; [
+                firefox
+                tree
+            ];
+        shell = pkgs.zsh;
+    };
 
-  # List packages installed in system profile.
-  # To search, run: $ nix search wget
-  environment.systemPackages = with pkgs; [
+    virtualisation.docker.enable = true;
 
-    # Vital
-    vim
-    i3
-    wget
-    betterlockscreen
+    documentation.dev.enable = true;
 
-    patchelf
-    autoPatchelfHook
+    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.pulseaudio = true;
 
-    google-chrome
-    slack
+    fonts.fontconfig.enable = true;
+    fonts.packages =  with pkgs; [
+        (nerdfonts.override {
+            fonts = [
+                "JetBrainsMono"
+            ];
+        })
+    ];
 
-    actkbd
-    brightnessctl
+    # List packages installed in system profile.
+    # To search, run: $ nix search wget
+    environment.systemPackages = with pkgs; [
+            vim                         # vim
+            i3                          # i3
+            wget                        # get requests
 
-    polybar
+            polybar                     # better bar
+            betterlockscreen            # screen locker
+            keepassxc                   # passwords utility
 
-    # Terminal
-    zsh
-    dash
-    oh-my-zsh
-    alacritty
-    fzf
+            patchelf                    # patch nixos executables
+            autoPatchelfHook            # patch nixos executables
 
-    keepassxc
+            actkbd                      # keyboard shortcut
+            brightnessctl               # luminosity handler
 
-    picom
-    bat
-    feh
-    unzip
-    direnv
+            zsh                         # zsh editor
+            oh-my-zsh                   # zsh upgraded
+            dash                        # dash editor
 
-    # Screen with 'import'
-    imagemagick
+            alacritty                   # alacritty terminal
+            fzf                         # fuzzy finder
 
-    man-pages
-    man-pages-posix
+            bat                         # better cat
+            feh                         # display images
+            unzip                       # unzip
+            direnv                      # diremv
 
-    pavucontrol
+            imagemagick                 # import
 
-    # C
-    gnumake
+            man-pages                   # man pages
+            man-pages-posix             # man pages
 
-    gcc
-    gdb
-    clang-tools
+            pavucontrol                 # audio control
 
-    # Python
-    python312
+            gnumake                     # gnu compiler
+            clang-tools                 # clang compiler
+            gcc                         # C compiler
+            gdb                         # C Debugger
 
-    # Java IDE
-    jetbrains.idea-ultimate
+            python312                   # python
 
-    # JS IDE
-    vscode
-    postman
+            vscode                      # vscode IDE
+            jetbrains.idea-ultimate     # IDEA IDE
+            jetbrains.clion             # clion IDE
+            jetbrains.rider             # rider IDE
 
-    # C/C++ IDE
-    jetbrains.clion
+            # Utils
+            git                         # git
+            xsel                        # read/write tool
 
-    # C# IDE
-    jetbrains.rider
+            discord                     # discord
+            slack                       # slack
 
-    # IDVOC
-    grafana
+            picom                       
+            dunst
+            eww
 
-    # FABOC
-    arduino
+            nixfmt-rfc-style
+            ];
 
-    # Utils
-    git
-    xsel
+    # Some programs need SUID wrappers
+    # Can be configured further or are started in user sessions.
+    # programs.mtr.enable = true;
+    # programs.gnupg.agent = {
+    #   enable = true; enableSSHSupport = true;
+    # };
 
-    discord
-    dunst
+    # List services that you want to enable:
 
-    eww
-  ];
+    # Enable the OpenSSH daemon.
+    # services.openssh.enable = true;
 
-  # Some programs need SUID wrappers
-  # Can be configured further or are started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true; enableSSHSupport = true;
-  # };
+    # Open ports in the firewall.
+    # networking.firewall.allowedTCPPorts = [ ... ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
 
-  # List services that you want to enable:
+    # Or disable the firewall altogether.
+    # networking.firewall.enable = false;
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+    # Copy the NixOS configuration file and link it from the resulting system
+    # (/run/current-system/configuration.nix).
+    # This is useful in case you accidentally delete configuration.nix.
+    system.copySystemConfiguration = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix).
-  # This is useful in case you accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
-
-  # This value determines the NixOS release from which the default settings
-  # for stateful data, like file locations and database versions on your
-  # system were taken. It's perfectly fine and recommended to leave this
-  # value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+    # This value determines the NixOS release from which the default settings
+    # for stateful data, like file locations and database versions on your
+    # system were taken. It's perfectly fine and recommended to leave this
+    # value at the release version of the first install of this system.
+    # Before changing this value read the documentation for this option
+    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+    system.stateVersion = "23.05"; # Did you read the comment?
 }

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+git pull
+
 mkdir -p etc/nixos
 
 mkdir -p home/geoffrey
