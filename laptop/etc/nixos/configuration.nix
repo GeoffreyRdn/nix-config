@@ -179,6 +179,7 @@
   virtualisation.docker.enable = true;
 
   documentation.dev.enable = true;
+  documentation.man.generateCaches = true;
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
