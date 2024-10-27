@@ -247,6 +247,8 @@
             git                         # git
             xsel                        # read/write tool
 
+            google-chrome
+
             discord                     # discord
             slack                       # slack
 
