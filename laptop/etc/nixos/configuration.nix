@@ -71,19 +71,16 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    layout = "us";
+    xkb.layout = "us";
     desktopManager = {
       xterm.enable = false;
     };
 
-    displayManager = {
-      defaultSession = "none+i3";
-      sessionCommands = ''
-        feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
-        polybar &
-        picom &
-      '';
-    };
+    displayManager.sessionCommands = ''
+      feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
+      polybar &
+      picom &
+    '';
 
     windowManager.i3 = {
       enable = true;
@@ -94,6 +91,13 @@
         i3blocks
       ];
     };
+  };
+
+  services.displayManager.defaultSession = "none+i3";
+
+  services.picom = {
+    enable = true;
+    vSync = true;
   };
 
   systemd.user.services.mpris-proxy = {
@@ -118,8 +122,13 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
   # enables support for Bluetooth
   hardware.bluetooth.enable = true;
@@ -214,13 +223,16 @@
   };
 
   fonts.fontconfig.enable = true;
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     (nerdfonts.override {
       fonts = [
         "JetBrainsMono"
       ];
     })
   ];
+
+  services.redis.servers."127.0.0.1".enable=true;
+  services.redis.servers."127.0.0.1".port=6379;
 
   # List packages installed in system profile.
   # To search, run: $ nix search wget
@@ -231,12 +243,16 @@
     i3
     wget
     betterlockscreen
+    arandr
 
     patchelf
     autoPatchelfHook
 
     google-chrome
     slack
+
+    jdk
+    prismlauncher
 
     actkbd
     brightnessctl
@@ -282,6 +298,7 @@
     # JS IDE
     vscode
     postman
+    redis
 
     # C/C++ IDE
     jetbrains.clion
