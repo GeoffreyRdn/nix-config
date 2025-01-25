@@ -14,6 +14,7 @@ cp /home/geoffrey/.zshrc home/geoffrey/
 cp /home/geoffrey/.config/alacritty.toml home/geoffrey/.config/
 
 cp -r /home/geoffrey/.config/i3 home/geoffrey/.config
+cp -r /home/geoffrey/.config/nvim home/geoffrey/.config
 cp -r /home/geoffrey/.config/polybar home/geoffrey/.config
 cp -r /home/geoffrey/.config/keepassxc home/geoffrey/.config
 

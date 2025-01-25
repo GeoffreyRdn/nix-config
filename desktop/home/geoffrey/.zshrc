@@ -5,9 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Aliases
-alias shut="shutdown -h now"
-
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 if [ ! -d "$ZINIT_HOME" ]; then
@@ -16,6 +13,8 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 
 source "${ZINIT_HOME}/zinit.zsh"
+
+alias vim=nvim
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
@@ -43,8 +42,10 @@ compinit
 
 export DIRENV_LOG_FORMAT=
 eval "$(direnv hook zsh)"
+
 export PGDATA="$HOME/postgres_data"
 export PGHOST="/tmp"
+export PGPORT="5432"
 
 plugins=(fzf)
 

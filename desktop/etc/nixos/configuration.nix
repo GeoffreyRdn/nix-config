@@ -128,8 +128,16 @@
     services.printing.enable = true;
 
     # Enable sound.
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+    };
 
     # enables support for Bluetooth
     hardware.bluetooth.enable = true;
@@ -199,8 +207,10 @@
     # To search, run: $ nix search wget
     environment.systemPackages = with pkgs; [
             vim                         # vim
+            neovim                      # neovim
             i3                          # i3
             wget                        # get requests
+            arandr                      # xrandr visualization
 
             polybar                     # better bar
             betterlockscreen            # screen locker
@@ -236,6 +246,7 @@
             gcc                         # C compiler
             gdb                         # C Debugger
 
+            jdk                         # java
             python312                   # python
 
             vscode                      # vscode IDE
@@ -251,6 +262,8 @@
 
             discord                     # discord
             slack                       # slack
+
+            prismlauncher               # minecraft
 
             picom                       
             dunst
