@@ -215,6 +215,8 @@
             betterlockscreen            # screen locker
             keepassxc                   # passwords utility
 
+            ripgrep                     # grep enhanced
+
             patchelf                    # patch nixos executables
             autoPatchelfHook            # patch nixos executables
 
@@ -244,6 +246,8 @@
             clang-tools                 # clang compiler
             gcc                         # C compiler
             gdb                         # C Debugger
+
+            yaml-cpp                    # yaml parser for cpp
 
             jdk                         # java
             python312                   # python
