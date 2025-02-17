@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =2
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/home/geoffrey'
 let g:netrw_dirhist_2='/home/geff/EPITA/YAKA/Java/epibazaar/exercises/kafka/ref/target/surefire-reports'
 let g:netrw_dirhist_1='/tmp/nix-develop-49369-0'
 let g:netrw_dirhist_0='/home/geff/EPITA/YAKA/C/epita-ing-assistants-acu-piscine-2027-assistants-geoffrey.redon/evalexpr/src'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_7='/home/geoffrey/EPITA/ING1/IDVOC/idvoc-2024/CommentsIntera
 let g:netrw_dirhist_6='/home/geoffrey/EPITA/ING1/IDVOC/idvoc-2024/CommentsEngine'
 let g:netrw_dirhist_5='/home/geoffrey/EPITA/ING1/IDVOC/idvoc-2024/CommentsInteractor'
 let g:netrw_dirhist_4='/home/geoffrey/EPITA/ING1/PROG/C++/tiger/tiger/src/escapes'
-let g:netrw_dirhist_3='/home/geoffrey/EPITA/ING1/PROG/C++/tiger/tiger/src'

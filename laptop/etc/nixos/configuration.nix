@@ -170,7 +170,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.geff = {
+  users.users.geoffrey = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -209,18 +209,21 @@
     ];
   };
 
-  services.grafana = {
-    enable = true;
-    settings = {
-      server = {
-        http_addr = "127.0.0.1";
-        http_port = 3001;
-        domain = "your.domain";
-        root_url = "https://your.domain/grafana/";
-        serve_from_sub_path = true;
-      };
-    };
-  };
+  #services.grafana = {
+  #  enable = true;
+  #  settings = {
+  #    server = {
+  #      http_addr = "127.0.0.1";
+  #      http_port = 3001;
+  #      domain = "your.domain";
+  #      root_url = "https://your.domain/grafana/";
+  #      serve_from_sub_path = true;
+  #    };
+  #  };
+  #};
+
+  #services.redis.servers."127.0.0.1".enable=true;
+  #services.redis.servers."127.0.0.1".port=6379;
 
   fonts.fontconfig.enable = true;
   fonts.packages = with pkgs; [
@@ -231,19 +234,19 @@
     })
   ];
 
-  services.redis.servers."127.0.0.1".enable=true;
-  services.redis.servers."127.0.0.1".port=6379;
-
   # List packages installed in system profile.
   # To search, run: $ nix search wget
   environment.systemPackages = with pkgs; [
 
     # Vital
     vim
+    neovim
     i3
+
     wget
     betterlockscreen
     arandr
+    ripgrep
 
     patchelf
     autoPatchelfHook
@@ -251,8 +254,8 @@
     google-chrome
     slack
 
-    jdk
-    prismlauncher
+    jdk21_headless
+    #prismlauncher
 
     actkbd
     brightnessctl
@@ -261,7 +264,7 @@
 
     # Terminal
     zsh
-    dash
+    #dash
     oh-my-zsh
     alacritty
     fzf
@@ -296,21 +299,23 @@
     jetbrains.idea-ultimate
 
     # JS IDE
-    vscode
-    postman
-    redis
+
+    # vscode
+
+    # postman
+    # redis
 
     # C/C++ IDE
-    jetbrains.clion
+    # jetbrains.clion
 
     # C# IDE
-    jetbrains.rider
+    # jetbrains.rider
 
     # IDVOC
-    grafana
+    # grafana
 
     # FABOC
-    arduino
+    # arduino
 
     # Utils
     git

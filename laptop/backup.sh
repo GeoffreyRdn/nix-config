@@ -4,21 +4,22 @@ git pull
 
 mkdir -p etc/nixos
 
-mkdir -p home/geff/
-mkdir -p home/geff/.config
+mkdir -p home/geoffrey/
+mkdir -p home/geoffrey/.config
 
 cp /etc/nixos/configuration.nix etc/nixos/
 
-cp /home/geff/.vimrc home/geff/
-cp /home/geff/.zshrc home/geff/
-cp /home/geff/.config/alacritty.yml home/geff/.config/
+cp /home/geoffrey/.vimrc home/geoffrey/
+cp /home/geoffrey/.zshrc home/geoffrey/
+cp /home/geoffrey/.config/alacritty.toml home/geoffrey/.config/
 
-cp -r /home/geff/.config/i3 home/geff/.config/
-cp -r /home/geff/.config/polybar home/geff/.config/
-cp -r /home/geff/.config/keepassxc home/geff/.config/
+cp -r /home/geoffrey/.config/i3 home/geoffrey/.config/
+cp -r /home/geoffrey/.config/nvim home/geoffrey/.config/
+cp -r /home/geoffrey/.config/polybar home/geoffrey/.config/
+cp -r /home/geoffrey/.config/keepassxc home/geoffrey/.config/
 
-cp -r /home/geff/.vim home/geff/
-cp -r /home/geff/.wallpapers home/geff/
+cp -r /home/geoffrey/.vim home/geoffrey/
+cp -r /home/geoffrey/.wallpapers home/geoffrey/
 
 git add .
 git commit -m "chore: laptop backup on $(date)"
