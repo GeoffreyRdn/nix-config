@@ -183,6 +183,7 @@
       "audio"
       "docker"
       "libvirtd"
+      "dialout"
     ];
     packages = with pkgs; [
       firefox
@@ -208,6 +209,8 @@
           };
       };
   };
+
+  users.groups.libvirtd.members = [ "geoffrey" ];
 
   programs.virt-manager.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
@@ -273,6 +276,8 @@
     arandr
     ripgrep
 
+    lsof
+
     patchelf
     autoPatchelfHook
 
@@ -289,7 +294,6 @@
 
     # Terminal
     zsh
-    #dash
     oh-my-zsh
     alacritty
     fzf
@@ -310,11 +314,6 @@
 
     pavucontrol
 
-    # mongodb
-    mongodb-ce
-    mongodb-tools
-    mongosh
-
     # C
     gnumake
 
@@ -329,23 +328,13 @@
     jetbrains.idea-ultimate
 
     # JS IDE
-
-    # vscode
+    vscode
 
     # postman
     # redis
 
-    # C/C++ IDE
-    # jetbrains.clion
-
-    # C# IDE
-    # jetbrains.rider
-
     # IDVOC
     # grafana
-
-    # FABOC
-    # arduino
 
     # Utils
     git
