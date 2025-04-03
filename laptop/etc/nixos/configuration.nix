@@ -95,11 +95,6 @@
 
   services.displayManager.defaultSession = "none+i3";
 
-  services.mongodb = {
-    enable = true;
-    package = pkgs.mongodb-ce;
-  };
-
   services.picom = {
     enable = true;
     vSync = true;
@@ -237,22 +232,6 @@
     ];
   };
 
-  #services.grafana = {
-  #  enable = true;
-  #  settings = {
-  #    server = {
-  #      http_addr = "127.0.0.1";
-  #      http_port = 3001;
-  #      domain = "your.domain";
-  #      root_url = "https://your.domain/grafana/";
-  #      serve_from_sub_path = true;
-  #    };
-  #  };
-  #};
-
-  #services.redis.servers."127.0.0.1".enable=true;
-  #services.redis.servers."127.0.0.1".port=6379;
-
   fonts.fontconfig.enable = true;
   fonts.packages = with pkgs; [
     (nerdfonts.override {
@@ -330,12 +309,6 @@
     # JS IDE
     vscode
 
-    # postman
-    # redis
-
-    # IDVOC
-    # grafana
-
     # Utils
     git
     xsel
@@ -377,5 +350,5 @@
   # value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 }
