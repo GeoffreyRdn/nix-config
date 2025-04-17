@@ -216,22 +216,6 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
 
-  services.actkbd = {
-    enable = true;
-    bindings = [
-      {
-        keys = [ 60 ];
-        events = [ "key" ];
-        command = "/run/current-system/sw/bin/brightnessctl s 5%-";
-      }
-      {
-        keys = [ 61 ];
-        events = [ "key" ];
-        command = "/run/current-system/sw/bin/brightnessctl s +5%";
-      }
-    ];
-  };
-
   fonts.fontconfig.enable = true;
   fonts.packages = with pkgs; [
     (nerdfonts.override {
@@ -266,7 +250,6 @@
     jdk21_headless
     #prismlauncher
 
-    actkbd
     brightnessctl
 
     polybar
