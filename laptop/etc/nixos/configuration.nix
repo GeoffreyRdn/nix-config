@@ -28,13 +28,9 @@
         rev = "803c5df";
         hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
       };
-      installPhase = "
-                mkdir -p $out
-                cp -r src/catppuccin-mocha-grub-theme/* $out/
-            ";
-      meta = {
-        description = "catppuccin-grub";
-      };
+      installPhase =
+        "\n                mkdir -p $out\n                cp -r src/catppuccin-mocha-grub-theme/* $out/\n            ";
+      meta = { description = "catppuccin-grub"; };
     };
   };
 
@@ -72,9 +68,7 @@
   services.xserver = {
     enable = true;
     xkb.layout = "us";
-    desktopManager = {
-      xterm.enable = false;
-    };
+    desktopManager = { xterm.enable = false; };
 
     displayManager.sessionCommands = ''
       feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
@@ -84,12 +78,7 @@
 
     windowManager.i3 = {
       enable = true;
-      extraPackages = with pkgs; [
-        dmenu
-        i3status
-        i3lock
-        i3blocks
-      ];
+      extraPackages = with pkgs; [ dmenu i3status i3lock i3blocks ];
     };
   };
 
@@ -102,19 +91,13 @@
 
   systemd.user.services.mpris-proxy = {
     description = "Mpris proxy";
-    after = [
-      "network.target"
-      "sound.target"
-    ];
+    after = [ "network.target" "sound.target" ];
     wantedBy = [ "default.target" ];
     serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
   };
 
   # enable flakes
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
@@ -136,9 +119,7 @@
   hardware.bluetooth.powerOnBoot = true;
 
   hardware.bluetooth.settings = {
-    General = {
-      Enable = "Source,Sink,Media,Socket";
-    };
+    General = { Enable = "Source,Sink,Media,Socket"; };
   };
 
   services.blueman.enable = true; # bluetooth cli
@@ -157,14 +138,7 @@
 
       ohMyZsh = {
         enable = true;
-        plugins = [
-          "git"
-          "docker"
-          "python"
-          "man"
-          "colored-man-pages"
-          "sudo"
-        ];
+        plugins = [ "git" "docker" "python" "man" "colored-man-pages" "sudo" ];
       };
     };
   };
@@ -172,38 +146,40 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.geoffrey = {
     isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "audio"
-      "docker"
-      "libvirtd"
-      "dialout"
-    ];
-    packages = with pkgs; [
-      firefox
-      tree
-    ];
+    extraGroups =
+      [ "wheel" "networkmanager" "audio" "docker" "libvirtd" "dialout" ];
+    packages = with pkgs; [ firefox tree ];
     shell = pkgs.zsh;
   };
 
   virtualisation.docker.enable = true;
 
-  virtualisation.libvirtd = {
+  virtualisation.containers.enable = true;
+  virtualisation = {
+    podman = {
       enable = true;
-      qemu = {
-          package = pkgs.qemu_kvm;
-          runAsRoot = true;
-          swtpm.enable = true;
-          ovmf = {
-              enable = true;
-              packages = [(pkgs.OVMF.override {
-                      secureBoot = true;
-                      tpmSupport = true;
-                      }).fd];
-          };
-      };
+      defaultNetwork.settings.dns_enabled = true;
+    };
   };
+
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = true;
+        packages = [
+          (pkgs.OVMF.override {
+            secureBoot = true;
+            tpmSupport = true;
+          }).fd
+        ];
+      };
+    };
+  };
+
 
   users.groups.libvirtd.members = [ "geoffrey" ];
 
@@ -217,13 +193,8 @@
   nixpkgs.config.pulseaudio = true;
 
   fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs; [
-    (nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-      ];
-    })
-  ];
+  fonts.packages = with pkgs;
+    [ (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
 
   # List packages installed in system profile.
   # To search, run: $ nix search wget
@@ -248,9 +219,12 @@
     slack
 
     jdk21_headless
-    #prismlauncher
+    prismlauncher
 
     brightnessctl
+
+    podman
+    podman-compose
 
     polybar
 

@@ -5,7 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-alias shut="shutdown -h now"
 alias vim=nvim
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -45,6 +44,8 @@ export DIRENV_LOG_FORMAT=
 eval "$(direnv hook zsh)"
 export PGDATA="$HOME/postgres_data"
 export PGHOST="/tmp"
+
+export EDITOR=nvim
 
 plugins=(fzf)
 
