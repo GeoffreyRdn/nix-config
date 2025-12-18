@@ -6,7 +6,7 @@ let b:sunshade="#fe8a26"       " orange
 let b:malibu="#62d6fd"         " light blue
 let b:pear="#a6e22e"           " light green
 let b:carnation="#f36464"      " light red
-let b:heliotrope="#be84ff"      " light purple
+let b:heliotrope="#be84ff"     " light purple
 
 " other (taken from molokai):
 let b:tundora="#444444"        " dark gray
@@ -74,7 +74,7 @@ call  s:hi("String",          "#ffd242",      "NONE",         "NONE")
 call  s:hi("Tag",             b:malibu,       "NONE",         "NONE")
 call  s:hi("Title",           b:spring_wood,  "NONE",         "bold")
 call  s:hi("Todo",            "#75715e",      "#8cd0de",      "bold")
-call  s:hi("Type",            b:pear,         "NONE",         "NONE")
+call  s:hi("Type",            b:malibu,       "NONE",         "NONE")
 call  s:hi("Underlined",      "NONE",         "NONE",         "underline")
 call  s:hi("DiffAdd",         b:spring_wood,  "#45820c",      "bold")
 call  s:hi("DiffDelete",      "#8a0707",      "NONE",         "NONE")

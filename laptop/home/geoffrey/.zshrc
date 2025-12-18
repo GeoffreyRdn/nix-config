@@ -5,8 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-alias vim=nvim
-
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 if [ ! -d "$ZINIT_HOME" ]; then
@@ -36,6 +34,20 @@ bindkey '^n' history-search-forward
 zstyle ':completion*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [ -d "$realpath" ]; then ls --color "$realpath"; else bat -n --color=always --line-range :500 "$realpath"; fi'
+
+export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+alias bathelp='bat --plain --language=help'
+
+help() {
+    "$@" --help 2>&1 | bathelp
+}
+
+batdiff() {
+    git diff --name-only --relative --diff-filter=d "$@" | xargs bat --diff
+}
+
+alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+alias gd="batdiff $@"
 
 autoload -Uz compinit
 compinit

@@ -68,6 +68,7 @@
   services.xserver = {
     enable = true;
     xkb.layout = "us";
+    xkb.variant = "intl";
     desktopManager = { xterm.enable = false; };
 
     displayManager.sessionCommands = ''
@@ -113,16 +114,27 @@
     pulse.enable = true;
   };
 
-  # enables support for Bluetooth
-  hardware.bluetooth.enable = true;
-  # powers up the default Bluetooth controller on boot
-  hardware.bluetooth.powerOnBoot = true;
-
-  hardware.bluetooth.settings = {
-    General = { Enable = "Source,Sink,Media,Socket"; };
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        # Shows battery charge of connected devices on supported
+        # Bluetooth adapters. Defaults to 'false'.
+        Experimental = true;
+        # When enabled other devices can connect faster to us, however
+        # the tradeoff is increased power consumption. Defaults to
+        # 'false'.
+        FastConnectable = true;
+      };
+      Policy = {
+      # Enable all controllers when they are found. This includes
+      # adapters present on start as well as adapters that are plugged
+      # in later on. Defaults to 'true'.
+        AutoEnable = true;
+      };
+    };
   };
-
-  services.blueman.enable = true; # bluetooth cli
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -168,18 +180,25 @@
       package = pkgs.qemu_kvm;
       runAsRoot = true;
       swtpm.enable = true;
-      ovmf = {
-        enable = true;
-        packages = [
-          (pkgs.OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-          }).fd
-        ];
-      };
+      # ovmf = {
+      #   enable = true;
+      #   packages = [
+      #     (pkgs.OVMF.override {
+      #       secureBoot = true;
+      #       tpmSupport = true;
+      #     }).fd
+      #   ];
+      # };
     };
   };
 
+  # replace patchelf
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      ncurses
+    ];
+  };
 
   users.groups.libvirtd.members = [ "geoffrey" ];
 
@@ -193,8 +212,7 @@
   nixpkgs.config.pulseaudio = true;
 
   fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs;
-    [ (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
+  fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
   # List packages installed in system profile.
   # To search, run: $ nix search wget
@@ -241,6 +259,7 @@
     feh
     unzip
     direnv
+    htop
 
     # Screen with 'import'
     imagemagick
@@ -256,6 +275,7 @@
     gcc
     gdb
     clang-tools
+    zip
 
     # Python
     python312
@@ -269,10 +289,15 @@
     # Utils
     git
     xsel
+    ctags
+    blueberry
 
     discord
     dunst
     nixfmt-classic
+
+    lua-language-server
+    yaml-language-server
 
     eww
   ];

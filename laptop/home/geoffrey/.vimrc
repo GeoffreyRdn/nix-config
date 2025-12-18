@@ -1,6 +1,7 @@
 " ~/.vimrc
 
-set omnifunc=syntaxcomplete
+set omnifunc=syntaxcomplete#Complete
+set completeopt-=preview
 
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -11,7 +12,6 @@ runtime! plugin/sensible.vim
 set encoding=utf-8 fileencodings=
 syntax on
 syntax enable
-
 
 " indentation
 set autoindent
@@ -51,3 +51,14 @@ let git_settings = system("git config --get vim.settings")
 if strlen(git_settings)
 	exe "set" git_settings
 endif
+
+function FormatBuffer()
+  if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
+    let cursor_pos = getpos('.')
+    :%!clang-format
+    call setpos('.', cursor_pos)
+  endif
+endfunction
+ 
+autocmd BufWritePre *.[ch],*.hh,*.cc :call FormatBuffer()
+
