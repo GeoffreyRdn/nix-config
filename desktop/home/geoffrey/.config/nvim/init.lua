@@ -21,7 +21,7 @@ vim.opt.rtp:prepend(lazypath)
 require "plugins"
 
 require'lspconfig'.clangd.setup{
-    cmd = { "/nix/store/5gmsjhsh7yh6m1b68wn4480rgyb74yc6-system-path/bin/clangd" }
+    cmd = { "/nix/store/i51x1gj35b42wmp9bwfw52pp7xc3m51z-system-path/bin/clangd" }
 }
 
 -- Basic settings

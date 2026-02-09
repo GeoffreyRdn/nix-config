@@ -22,6 +22,26 @@ local plugins = {
     end
   },
   {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require("lint").linters_by_ft = {
+        c = { "clangtidy" },
+        python = { "flake8" },
+      }
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          c = { "clang_format" },
+            python = { "black" },
+        },
+      })
+    end,
+  },
+  {
     "jay-babu/mason-nvim-dap.nvim",
     event = "VeryLazy",
     dependencies = {
@@ -37,13 +57,6 @@ local plugins = {
     config = function(_, _)
       require("core.utils").load_mappings("dap")
     end
-  },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-    event = "VeryLazy",
-    opts = function()
-      return require "custom.configs.null-ls"
-    end,
   },
   {
     "neovim/nvim-lspconfig",

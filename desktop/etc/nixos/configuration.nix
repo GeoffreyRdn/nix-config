@@ -69,20 +69,15 @@
     xserver = {
       enable = true;
       videoDrivers = [ "amdgpu" ];
+
       xkb.layout = "us";
-      desktopManager = { xterm.enable = false; };
+    xkb.variant = "intl";
+      desktopManager.xterm.enable = false;
 
       windowManager.i3 = {
         enable = true;
         extraPackages = with pkgs; [ dmenu i3status i3lock i3blocks ];
       };
-
-      displayManager.sessionCommands = ''
-        feh --bg-scale "$HOME/.wallpapers/skull-gruv.png"
-        xrandr --output DisplayPort-0 --primary --rate 144 --left-of HDMI-A-0 --output HDMI-A-0 --auto
-        polybar &
-        picom &
-      '';
     };
 
     # Handle USB
@@ -202,8 +197,7 @@
   nixpkgs.config.pulseaudio = true;
 
   fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs;
-    [ (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
+  fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
   # List packages installed in system profile.
   # To search, run: $ nix search wget
@@ -264,6 +258,7 @@
     jetbrains.idea-ultimate # IDEA IDE
     jetbrains.clion # clion IDE
     jetbrains.rider # rider IDE
+    jetbrains.pycharm-professional # pycharm IDE
 
     # Utils
     git # git
@@ -312,5 +307,5 @@
   # value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }
